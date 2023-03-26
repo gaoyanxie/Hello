@@ -1,61 +1,53 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Fillable Table Example</title>
-    <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="text/babel">
-      function FillableTable() {
-        const [tableData, setTableData] = React.useState([
-          ["", "", ""],
-          ["", "", ""],
-          ["", "", ""],
-          ["", "", ""],
-          ["", "", ""],
-        ]);
-
-        const handleInputChange = (event, row, col) => {
-          const newData = [...tableData];
-          newData[row][col] = event.target.value;
-          setTableData(newData);
-        };
-
-        return (
-          <table>
-            <thead>
-              <tr>
-                <th>Column 1</th>
-                <th>Column 2</th>
-                <th>Column 3</th>
+function FillableTable() {
+    const [tableData, setTableData] = React.useState([
+      ["", "", ""],
+      ["", "", ""],
+      ["", "", ""],
+      ["", "", ""],
+      ["", "", ""],
+    ]);
+  
+    const handleInputChange = (event, row, col) => {
+      const newData = [...tableData];
+      newData[row][col] = event.target.value;
+      setTableData(newData);
+    };
+  
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      console.log("Table data submitted:", tableData);
+    };
+  
+    return (
+      <form onSubmit={handleSubmit}>
+        <table>
+          <thead>
+            <tr>
+              <th>Column 1</th>
+              <th>Column 2</th>
+              <th>Column 3</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tableData.map((rowData, rowIndex) => (
+              <tr key={rowIndex}>
+                {rowData.map((cellData, colIndex) => (
+                  <td key={colIndex}>
+                    <input
+                      type="text"
+                      value={cellData}
+                      onChange={(event) =>
+                        handleInputChange(event, rowIndex, colIndex)
+                      }
+                    />
+                  </td>
+                ))}
               </tr>
-            </thead>
-            <tbody>
-              {tableData.map((rowData, rowIndex) => (
-                <tr key={rowIndex}>
-                  {rowData.map((cellData, colIndex) => (
-                    <td key={colIndex}>
-                      <input
-                        type="text"
-                        value={cellData}
-                        onChange={(event) =>
-                          handleInputChange(event, rowIndex, colIndex)
-                        }
-                      />
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        );
-      }
-
-      ReactDOM.render(<FillableTable />, document.getElementById("root"));
-    </script>
-  </body>
-</html>
+            ))}
+          </tbody>
+        </table>
+        <button type="submit">Submit</button>
+      </form>
+    );
+  }
+  
